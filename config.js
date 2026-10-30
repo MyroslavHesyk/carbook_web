@@ -4,6 +4,6 @@
  * A publishable key is designed to be public. Never put sb_secret_ or service_role here.
  */
 window.CARBOOK_CONFIG = {
-  supabaseUrl: "",
-  publishableKey: ""
+  supabaseUrl: "https://ugvqgdssuwxshlxlfqgs.supabase.co",
+  publishableKey: "sb_publishable_pLJhkJpsA8aOOjCZpwcmXw_9vpejApm"
 };
