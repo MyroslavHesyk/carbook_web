@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101b2a">
+  <meta name="description" content="CarBook — цифровий гараж і сервісна історія вашого автомобіля.">
+  <meta name="color-scheme" content="light">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./assets/icon-192.png">
+  <link rel="stylesheet" href="./styles.css">
+  <title>CarBook — цифровий гараж</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./config.js"></script>
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <svg class="svg-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="icon-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+    <symbol id="icon-car" viewBox="0 0 24 24"><path d="m5 11 1.5-4.2A2.8 2.8 0 0 1 9.1 5h5.8a2.8 2.8 0 0 1 2.6 1.8L19 11l1.2 1.2a2 2 0 0 1 .6 1.4V18a1 1 0 0 1-1 1h-1.5v-2h-13v2H3.8a1 1 0 0 1-1-1v-4.4a2 2 0 0 1 .6-1.4L5 11Z"/><path d="M5 11h14M6 15h.01M18 15h.01"/></symbol>
+    <symbol id="icon-fuel" viewBox="0 0 24 24"><path d="M5 21V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v17M4 21h12M8 7h4M15 8h2l2 2v7a2 2 0 0 0 4 0v-5l-2-2"/><path d="M8 12h4"/></symbol>
+    <symbol id="icon-wallet" viewBox="0 0 24 24"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4H20v16H6a3 3 0 0 1-3-3V7a.5.5 0 0 1 .5-.5H20"/><path d="M16 12h4M17 12a1 1 0 1 0 0 .01"/></symbol>
+    <symbol id="icon-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a5 5 0 0 0-6.4 6.4L3 18a2.1 2.1 0 0 0 3 3l5.3-5.3a5 5 0 0 0 6.4-6.4L14 13l-3-3 3.7-3.7Z"/></symbol>
+    <symbol id="icon-bell" viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM10 21h4"/></symbol>
+    <symbol id="icon-note" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M14 3v5h5M8 12h8M8 16h8"/></symbol>
+    <symbol id="icon-chart" viewBox="0 0 24 24"><path d="M4 19V5M4 19h17M8 15l4-4 3 2 5-7"/></symbol>
+    <symbol id="icon-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+    <symbol id="icon-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="icon-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="icon-chevron" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="icon-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="icon-gauge" viewBox="0 0 24 24"><path d="M4 18a9 9 0 1 1 16 0M12 13l4-4M7 18h10"/></symbol>
+    <symbol id="icon-edit" viewBox="0 0 24 24"><path d="m4 16.5-.8 4.3 4.3-.8L19 8.5 15.5 5 4 16.5Z"/><path d="m13.5 7 3.5 3.5"/></symbol>
+    <symbol id="icon-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 14h10l1-14M9 7V4h6v3"/></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="icon-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></symbol>
+    <symbol id="icon-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 20h16"/></symbol>
+    <symbol id="icon-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="icon-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></symbol>
+    <symbol id="icon-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+    <symbol id="icon-spark" viewBox="0 0 24 24"><path d="m12 3 1.8 6.2L20 11l-6.2 1.8L12 19l-1.8-6.2L4 11l6.2-1.8L12 3ZM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16Z"/></symbol>
+    <symbol id="icon-logout" viewBox="0 0 24 24"><path d="M10 17l5-5-5-5M15 12H3M13 4h6a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6"/></symbol>
+    <symbol id="icon-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></symbol>
+    <symbol id="icon-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></symbol>
+  </svg>
+
+  <section id="auth-view" class="auth-shell">
+    <div class="auth-showcase">
+      <div class="auth-brand"><span class="brand-emblem">CB</span><span>CarBook<small>YOUR DIGITAL GARAGE</small></span></div>
+      <div class="auth-showcase-copy">
+        <span class="overline"><span class="live-dot"></span> ОСОБИСТИЙ АВТОМОБІЛЬНИЙ ЖУРНАЛ</span>
+        <h1>Увесь контроль<br>над <em>автомобілем.</em></h1>
+        <p>Витрати, заправки, сервісна історія та нагадування — зібрані в одному цифровому гаражі.</p>
+        <div class="showcase-car" aria-hidden="true">
+          <div class="car-glow"></div>
+          <svg viewBox="0 0 620 230" role="img" aria-label="Ілюстрація автомобіля">
+            <defs><linearGradient id="carPaint" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#f8fbff"/><stop offset=".52" stop-color="#b9c8d6"/><stop offset="1" stop-color="#71899d"/></linearGradient><linearGradient id="glass" x1="0" x2="1"><stop stop-color="#526f82"/><stop offset="1" stop-color="#15283a"/></linearGradient></defs>
+            <path d="M92 148 118 111q12-18 40-24l74-17q23-5 48-5h94q25 0 46 15l55 41 53 12q22 5 26 26l2 18H67l5-19q4-11 20-10Z" fill="url(#carPaint)" stroke="#e7f0f7" stroke-width="3"/>
+            <path d="m248 78-14 57h103V69h-65q-13 0-24 9Zm101-9v66h119l-48-37q-15-12-31-21-12-7-24-8Z" fill="url(#glass)" stroke="#8da3b3" stroke-width="2"/>
+            <path d="M74 153h468M91 164h25m388 0h25" stroke="#607789" stroke-width="3" opacity=".7"/>
+            <path d="M77 147h40l-7 13H72M500 145h39l8 13h-43" fill="#e9f4fb"/>
+            <circle cx="167" cy="177" r="34" fill="#101b2a" stroke="#647b8e" stroke-width="6"/><circle cx="167" cy="177" r="16" fill="#b8c6d0"/><circle cx="167" cy="177" r="6" fill="#52697c"/>
+            <circle cx="463" cy="177" r="34" fill="#101b2a" stroke="#647b8e" stroke-width="6"/><circle cx="463" cy="177" r="16" fill="#b8c6d0"/><circle cx="463" cy="177" r="6" fill="#52697c"/>
+            <path d="M101 146h33M493 145h39" stroke="#d9f56b" stroke-width="5" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="auth-showcase-foot"><span>01 / DIGITAL SERVICE BOOK</span><span>BUILT FOR EVERY JOURNEY</span></div>
+    </div>
+
+    <div class="auth-panel-wrap">
+      <div class="auth-panel">
+        <div class="auth-mobile-brand"><span class="brand-emblem">CB</span><b>CarBook</b></div>
+        <span class="overline auth-overline">ПОЧИНАЄМО ЗАРАЗ</span>
+        <h2 id="auth-heading">Вхід до гаража</h2>
+        <p class="auth-description" id="auth-description">Увійдіть, щоб переглядати історію та керувати автомобілями.</p>
+        <form id="auth-form" class="auth-form">
+          <label class="field-label" for="auth-email">Електронна пошта</label>
+          <div class="input-wrap"><svg class="icon"><use href="#icon-mail"></use></svg><input id="auth-email" type="email" autocomplete="email" placeholder="name@example.com" required></div>
+          <label class="field-label" for="auth-password">Пароль</label>
+          <div class="input-wrap"><svg class="icon"><use href="#icon-lock"></use></svg><input id="auth-password" type="password" autocomplete="current-password" minlength="8" placeholder="Не менше 8 символів" required></div>
+          <button class="btn btn-primary btn-wide" id="auth-submit" type="submit">Увійти до CarBook <svg class="icon"><use href="#icon-arrow"></use></svg></button>
+        </form>
+        <div class="auth-links"><button class="link-button" id="auth-mode-toggle" type="button">Створити обліковий запис</button><button class="link-button" id="forgot-password" type="button">Забули пароль?</button></div>
+        <p id="auth-message" class="auth-message" role="status" aria-live="polite">Дані зберігатимуться у вашій персональній базі.</p>
+        <div class="auth-security"><svg class="icon"><use href="#icon-shield"></use></svg><span>Приватний доступ. Ваші записи бачите лише ви.</span></div>
+      </div>
+      <footer class="auth-footer">CARBOOK WEB <span>·</span> DIGITAL GARAGE</footer>
+    </div>
+  </section>
+
+  <div id="app" class="app-shell is-hidden">
+    <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
+    <aside id="sidebar" class="sidebar">
+      <a class="brand-lockup" href="#dashboard" data-page="dashboard" aria-label="CarBook — огляд">
+        <span class="brand-emblem">CB</span><span class="brand-name">CarBook<small>YOUR DIGITAL GARAGE</small></span>
+      </a>
+      <div class="nav-caption">РОБОЧИЙ ПРОСТІР</div>
+      <nav class="side-navigation" aria-label="Головна навігація">
+        <button class="nav-link is-active" data-page="dashboard"><svg class="icon"><use href="#icon-grid"></use></svg><span>Огляд</span></button>
+        <button class="nav-link" data-page="cars"><svg class="icon"><use href="#icon-car"></use></svg><span>Мої автомобілі</span><span class="nav-count" id="nav-car-count">0</span></button>
+        <div class="nav-caption nav-caption-spaced">ОБЛІК АВТОМОБІЛЯ</div>
+        <button class="nav-link" data-page="fuel"><svg class="icon"><use href="#icon-fuel"></use></svg><span>Заправки</span></button>
+        <button class="nav-link" data-page="expenses"><svg class="icon"><use href="#icon-wallet"></use></svg><span>Витрати</span></button>
+        <button class="nav-link" data-page="service"><svg class="icon"><use href="#icon-wrench"></use></svg><span>Обслуговування</span></button>
+        <button class="nav-link" data-page="reminders"><svg class="icon"><use href="#icon-bell"></use></svg><span>Нагадування</span><span class="nav-count" id="nav-reminder-count">0</span></button>
+        <button class="nav-link" data-page="notes"><svg class="icon"><use href="#icon-note"></use></svg><span>Нотатки</span></button>
+        <div class="nav-caption nav-caption-spaced">АНАЛІТИКА</div>
+        <button class="nav-link" data-page="stats"><svg class="icon"><use href="#icon-chart"></use></svg><span>Статистика</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <button class="nav-link profile-nav" data-page="profile"><svg class="icon"><use href="#icon-user"></use></svg><span>Профіль та дані</span></button>
+        <div class="sidebar-user">
+          <div class="user-avatar" id="user-avatar">U</div>
+          <div class="user-info"><b id="user-email">Користувач</b><small>Особистий гараж</small></div>
+          <button class="icon-button logout-button" id="logout" type="button" title="Вийти" aria-label="Вийти"><svg class="icon"><use href="#icon-logout"></use></svg></button>
+        </div>
+        <div class="sidebar-version">CARBOOK WEB <span>v2.0</span></div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="topbar-leading">
+          <button class="icon-button mobile-menu-button" id="mobile-menu" type="button" aria-label="Відкрити меню"><svg class="icon"><use href="#icon-menu"></use></svg></button>
+          <div class="page-heading"><div class="breadcrumbs"><span>CARBOOK</span><svg class="icon"><use href="#icon-chevron"></use></svg><span id="breadcrumb-current">ОГЛЯД</span></div><h1 id="page-title">Огляд</h1></div>
+        </div>
+        <div class="topbar-actions">
+          <label class="car-filter-wrap" for="active-car"><svg class="icon"><use href="#icon-car"></use></svg><select id="active-car" aria-label="Фільтр автомобіля"><option value="">Усі автомобілі</option></select></label>
+          <button class="btn btn-primary top-add-button" id="quick-add" type="button"><svg class="icon"><use href="#icon-plus"></use></svg><span>Додати запис</span></button>
+          <div class="topbar-avatar" id="topbar-avatar">U</div>
+        </div>
+      </header>
+
+      <div id="app-notice" class="app-notice is-hidden" role="status" aria-live="polite"></div>
+      <section id="view-content" class="view-content" aria-live="polite"></section>
+      <footer class="main-footer"><span>CARBOOK <b>·</b> YOUR DIGITAL GARAGE</span><span>Ваші дані зберігаються у захищеній базі Supabase</span></footer>
+    </main>
+
+    <nav class="mobile-bottom-nav" aria-label="Мобільна навігація">
+      <button class="is-active" data-page="dashboard"><svg class="icon"><use href="#icon-grid"></use></svg><small>Огляд</small></button>
+      <button data-page="cars"><svg class="icon"><use href="#icon-car"></use></svg><small>Авто</small></button>
+      <button data-page="fuel"><svg class="icon"><use href="#icon-fuel"></use></svg><small>Пальне</small></button>
+      <button data-page="expenses"><svg class="icon"><use href="#icon-wallet"></use></svg><small>Витрати</small></button>
+      <button data-page="stats"><svg class="icon"><use href="#icon-chart"></use></svg><small>Звіти</small></button>
+    </nav>
+  </div>
+
+  <div id="modal-root"></div>
+  <div id="toast-root" class="toast-root" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>
